@@ -1,0 +1,45 @@
+---
+- name: Deploy Local ELK Stack and Prepare Calc Image
+  hosts: local
+  gather_facts: no
+  vars:
+    project_dir: "{{ playbook_dir }}/.."
+    image_name: "hackingjack139/devops-calc:latest"
+
+  tasks:
+    - name: Ensure logs directory exists
+      win_file:
+        path: "{{ project_dir }}\\logs"
+        state: directory
+      delegate_to: localhost
+      ignore_errors: yes # Fallback for non-windows environments if run elsewhere
+      
+    - name: Ensure logs directory exists (Linux/Mac fallback)
+      file:
+        path: "{{ project_dir }}/logs"
+        state: directory
+        mode: '0777'
+      ignore_errors: yes
+
+    - name: Start ELK Stack via Docker Compose
+      command: docker compose up -d
+      args:
+        chdir: "{{ project_dir }}"
+      register: compose_up
+      changed_when: "'Started' in compose_up.stdout or 'Created' in compose_up.stdout"
+
+    - name: Pull latest Calculator Docker Image
+      command: docker pull {{ image_name }}
+      register: docker_pull
+      changed_when: "'Downloaded newer image' in docker_pull.stdout"
+
+    - name: Display instructions for running the application
+      debug:
+        msg: |
+          Deployment complete!
+          
+          1. The ELK stack (Elasticsearch, Logstash, Kibana) is running in the background.
+             - Access Kibana at: http://localhost:5601
+             
+          2. To run the Calculator application, execute this command in your terminal:
+             docker run -it -v "%cd%\logs:/app/logs" {{ image_name }}
