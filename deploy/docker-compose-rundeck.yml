@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  rundeck:
+    build:
+      context: .
+      dockerfile: Dockerfile_rundeck
+    container_name: rundeck-server
+    environment:
+      - RUNDECK_GRAILS_URL=http://localhost:4440
+      # Create a default project automatically
+      - RUNDECK_PROJECT_DEVOPS_CALC_DESCRIPTION=DevOps Calculator Deployment Project
+    ports:
+      - "4440:4440"
+    volumes:
+      # Mount the project files so Rundeck can access docker-compose.yml and logs
+      - ../:/home/rundeck/project
+      # Pass the Docker socket so Rundeck can execute docker commands
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: "rundeck:root" # Allows writing to the mounted /home/rundeck/project dir

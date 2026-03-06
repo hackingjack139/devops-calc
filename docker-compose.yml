@@ -13,11 +13,12 @@ services:
       - esdata:/usr/share/elasticsearch/data
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:8.10.4
+    build:
+      context: .
+      dockerfile: Dockerfile_logstash
     container_name: logstash
     volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
-      - ./logs:/usr/share/logstash/logs:ro
+      - applogs:/usr/share/logstash/logs:ro
     ports:
       - "5044:5044"
     depends_on:
@@ -36,3 +37,5 @@ services:
 volumes:
   esdata:
     driver: local
+  applogs:
+    external: true

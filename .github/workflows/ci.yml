@@ -47,3 +47,21 @@ jobs:
           context: .
           push: true
           tags: hackingjack139/devops-calc:latest
+
+  notify:
+    needs: [build_and_test, docker_build_and_push]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: GitHub Actions job result - ${{ job.status }}
+          to: ${{ secrets.DEVELOPER_EMAIL }}
+          from: DevOps Pipeline
+          body: Pipeline run for ${{ github.repository }} has finished with status ${{ job.status }}.

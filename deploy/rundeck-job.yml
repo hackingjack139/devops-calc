@@ -1,0 +1,21 @@
+- defaultTab: nodes
+  description: 'Deploys the ELK Stack and prepares the DevOps Calculator Docker Image.'
+  executionEnabled: true
+  id: deploy-devops-calc
+  loglevel: INFO
+  name: Deploy Calc and Monitoring Stack
+  nodeFilterEditable: false
+  plugins:
+    ExecutionLifecycle: null
+  scheduleEnabled: true
+  sequence:
+    commands:
+    - description: 'Ensure Logs Directory Exists'
+      exec: mkdir -p /home/rundeck/project/logs
+    - description: 'Start ELK Stack'
+      exec: docker compose -f /home/rundeck/project/docker-compose.yml up -d
+    - description: 'Pull Latest Image'
+      exec: docker pull hackingjack139/devops-calc:latest
+    keepgoing: false
+    strategy: node-first
+  uuid: deploy-devops-calc
