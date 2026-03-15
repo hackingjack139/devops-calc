@@ -3,6 +3,11 @@
 
 **Name:** Manzil Baruah
 
+## Links
+- **GitHub Repository:** [https://github.com/hackingjack139/devops-calc](https://github.com/hackingjack139/devops-calc)
+- **Docker Hub Repository:** [https://hub.docker.com/r/hackingjack139/devops-calc](https://hub.docker.com/r/hackingjack139/devops-calc)
+
+
 ## 1. Introduction: What and Why of DevOps?
 
 **What is DevOps?**

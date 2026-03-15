@@ -20,7 +20,7 @@ def displayMenu():
     print('2: Factorial function - x!')
     print('3: Natural logarithm (base е) - ln(x)')
     print('4: Power function - x^b')
-    print('5: Exit')
+    print('5: Exit (changed)')
 
 def squareRoot(x):
     if x < 0:
